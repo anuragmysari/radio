@@ -92,7 +92,7 @@ public class StationController {
 	public ResponseEntity<Object> update(@PathVariable String stationId, @RequestBody Station station) {
 		ResponseDTO response = null;
 		try {
-			if (null != station.getStationId() || stationId != station.getStationId()) {
+			if (null != station.getStationId() && !station.getStationId().equalsIgnoreCase(stationId)) {
 				throw new StationException("StationId Mismatch");
 			}
 			if (null == stationService.findByID(stationId)) {

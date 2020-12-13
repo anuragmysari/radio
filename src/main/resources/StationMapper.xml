@@ -42,7 +42,7 @@
 	</select>
 
 	<!--Add Station -->
-	<insert id="addStation" useGeneratedKeys="true" keyProperty="id"
+	<insert id="addStation" keyProperty="stationId"
 		parameterType="Station">
 		INSERT INTO STATION(stationId, name, hd_Enabled,
 		callSign)

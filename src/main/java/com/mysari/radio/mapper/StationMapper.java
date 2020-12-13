@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.mysari.radio.mapper;
 
@@ -24,7 +24,7 @@ public interface StationMapper {
 	void removeStation(String stationId);
 
 	void updateStation(@Param("stationId") String stationId, @Param("name") String name,
-			@Param("hdEnabled") boolean hdEnabled, @Param("callSign") String callSign);
+			@Param("hd_Enabled") boolean hd_Enabled, @Param("callSign") String callSign);
 
 	Station findByID(String stationId);
 
