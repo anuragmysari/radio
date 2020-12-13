@@ -3,7 +3,6 @@
  */
 package com.mysari.radio.controller;
 
-import java.text.MessageFormat;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,10 +51,6 @@ public class StationController {
 	public ResponseEntity<Object> addStation(@RequestBody Station station) {
 		ResponseDTO response = null;
 		try {
-			if (stationService.findByID(station.getStationId()) != null) {
-				String message = MessageFormat.format("Station for Id {0} already exists", station.getStationId());
-				throw new StationException(message);
-			}
 			stationService.addStation(station);
 			response = new ResponseDTO(HttpStatus.CREATED, station, "201", "CREATED");
 		} catch (StationException e) {
@@ -73,10 +68,6 @@ public class StationController {
 		ResponseDTO response = null;
 		try {
 			Station station = stationService.findByID(stationId);
-			if (null == stationService.findByID(stationId)) {
-				String message = MessageFormat.format("Station for Id {0} does not exist", stationId);
-				throw new StationException(message);
-			}
 			stationService.removeStation(stationId);
 			response = new ResponseDTO(HttpStatus.OK, station, "200", "DELETED");
 		} catch (StationException e) {
@@ -92,15 +83,8 @@ public class StationController {
 	public ResponseEntity<Object> update(@PathVariable String stationId, @RequestBody Station station) {
 		ResponseDTO response = null;
 		try {
-			if (null != station.getStationId() && !station.getStationId().equalsIgnoreCase(stationId)) {
-				throw new StationException("StationId Mismatch");
-			}
-			if (null == stationService.findByID(stationId)) {
-				String message = MessageFormat.format("Station for Id {0} does not exist", stationId);
-				throw new StationException(message);
-			}
+			stationService.updateStation(station, stationId);
 			station.setStationId(stationId);
-			stationService.updateStation(station);
 			response = new ResponseDTO(HttpStatus.OK, station, "200", "UPDATED");
 		} catch (StationException e) {
 			response = new ResponseDTO(HttpStatus.BAD_REQUEST, null, "400", e.getMessage());
@@ -114,12 +98,8 @@ public class StationController {
 	@GetMapping(value = "search/{search}")
 	public ResponseEntity<Object> searchByIdorName(@PathVariable String search) {
 		ResponseDTO response = null;
-		final List<Station> station = stationService.findByIdorName(search);
 		try {
-			if (null == station || station.isEmpty()) {
-				String message = MessageFormat.format("Station for search {0} does not exist", search);
-				throw new StationException(message);
-			}
+			final List<Station> station = stationService.findByIdorName(search);
 			response = new ResponseDTO(HttpStatus.OK, station, "200", "SUCCESS");
 		} catch (StationException e) {
 			response = new ResponseDTO(HttpStatus.BAD_REQUEST, null, "400", e.getMessage());
@@ -145,12 +125,8 @@ public class StationController {
 	@GetMapping(value = "id/{stationId}")
 	public ResponseEntity<Object> getById(@PathVariable String stationId) {
 		ResponseDTO response = null;
-		final Station station = stationService.findByID(stationId);
 		try {
-			if (null == station) {
-				String message = MessageFormat.format("Station for Id {0} does not exist", stationId);
-				throw new StationException(message);
-			}
+			final Station station = stationService.findByID(stationId);
 			response = new ResponseDTO(HttpStatus.OK, station, "200", "SUCCESS");
 		} catch (StationException e) {
 			response = new ResponseDTO(HttpStatus.BAD_REQUEST, null, "400", e.getMessage());
@@ -164,12 +140,9 @@ public class StationController {
 	@GetMapping("name/{name}")
 	public ResponseEntity<Object> findByName(@PathVariable String name) {
 		ResponseDTO response = null;
-		final Station station = stationService.findByName(name);
+
 		try {
-			if (null == station) {
-				String message = MessageFormat.format("Station for Name {0} does not exist", name);
-				throw new StationException(message);
-			}
+			final Station station = stationService.findByName(name);
 			response = new ResponseDTO(HttpStatus.OK, station, "200", "SUCCESS");
 		} catch (StationException e) {
 			response = new ResponseDTO(HttpStatus.BAD_REQUEST, null, "400", e.getMessage());
