@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.mysari.radio.model;
+package com.mysari.radio.entity;
 
 import lombok.Data;
 

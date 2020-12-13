@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mysari.radio.mapper.StationMapper">
+	<resultMap id="BaseResultMap"
+		type="com.mysari.radio.mapper.StationMapper">
+		<id column="stationId" property="stationId" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="hdEnabled" property="hdEnabled"
+			jdbcType="TINYINT" />
+		<result column="callSign" property="callSign"
+			jdbcType="VARCHAR" />
+	</resultMap>
+
+	<!--Query all -->
+	<select id="findAll" resultType="station">
+		SELECT * FROM STATION
+	</select>
+
+	<!--Find By ID -->
+	<select id="findByID" resultType="station">
+		SELECT * FROM STATION WHERE
+		STATIONID = #{stationId}
+	</select>
+
+	<!--Find By NAME -->
+	<select id="findByName" resultType="station">
+		SELECT * FROM STATION WHERE
+		NAME = #{name}
+	</select>
+
+	<!--Find HDEnabled -->
+	<select id="findHDEnabled" resultType="station">
+		SELECT * FROM STATION
+		WHERE HDENABLED = TRUE
+	</select>
+
+	<!--Add Station -->
+	<insert id="addStation" useGeneratedKeys="true" keyProperty="id"
+		parameterType="Station">
+		INSERT INTO STATION(stationId, name, hdEnabled,
+		callSign)
+		VALUES(#{stationId}, #{name}, #{hdEnabled}, #{callSign})
+	</insert>
+
+	<!--Remove Station -->
+	<delete id="removeStation">
+		DELETE FROM STATION WHERE STATIONID =#{stationId}
+	</delete>
+
+	<!--Update Station information -->
+	<update id="updateStation" parameterType="Station">
+		UPDATE STATION SET NAME
+		= #{name}, HDENABLED =#{hdEnabled}, CALLSIGN
+		=#{callSign}
+		WHERE
+		STATIONID = #{stationId}
+	</update>
+
+</mapper>
