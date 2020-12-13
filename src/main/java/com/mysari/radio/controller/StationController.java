@@ -111,8 +111,8 @@ public class StationController {
 
 	}
 
-	@GetMapping(value = "{search}")
-	public ResponseEntity<Object> get(@PathVariable String search) {
+	@GetMapping(value = "search/{search}")
+	public ResponseEntity<Object> searchByIdorName(@PathVariable String search) {
 		ResponseDTO response = null;
 		final List<Station> station = stationService.findByIdorName(search);
 		try {
@@ -142,42 +142,42 @@ public class StationController {
 		return new ResponseEntity<>(response, response.getStatus());
 	}
 
-//	@GetMapping(value = "{stationId}")
-//	public ResponseEntity<Object> get(@PathVariable String stationId) {
-//		ResponseDTO response = null;
-//		final Station station = stationService.findByID(stationId);
-//		try {
-//			if (null == station) {
-//				String message = MessageFormat.format("Station for Id {0} does not exist", stationId);
-//				throw new StationException(message);
-//			}
-//			response = new ResponseDTO(HttpStatus.OK, station, "200", "SUCCESS");
-//		} catch (StationException e) {
-//			response = new ResponseDTO(HttpStatus.BAD_REQUEST, null, "400", e.getMessage());
-//		} catch (Exception e) {
-//			response = new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, null, "500", e.getMessage());
-//		}
-//		return new ResponseEntity<>(response, response.getStatus());
-//
-//	}
+	@GetMapping(value = "id/{stationId}")
+	public ResponseEntity<Object> getById(@PathVariable String stationId) {
+		ResponseDTO response = null;
+		final Station station = stationService.findByID(stationId);
+		try {
+			if (null == station) {
+				String message = MessageFormat.format("Station for Id {0} does not exist", stationId);
+				throw new StationException(message);
+			}
+			response = new ResponseDTO(HttpStatus.OK, station, "200", "SUCCESS");
+		} catch (StationException e) {
+			response = new ResponseDTO(HttpStatus.BAD_REQUEST, null, "400", e.getMessage());
+		} catch (Exception e) {
+			response = new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, null, "500", e.getMessage());
+		}
+		return new ResponseEntity<>(response, response.getStatus());
 
-//	@GetMapping("name/{name}")
-//	public ResponseEntity<Object> findByName(@PathVariable String name) {
-//		ResponseDTO response = null;
-//		final Station station = stationService.findByName(name);
-//		try {
-//			if (null == station) {
-//				String message = MessageFormat.format("Station for Name {0} does not exist", name);
-//				throw new StationException(message);
-//			}
-//			response = new ResponseDTO(HttpStatus.OK, station, "200", "SUCCESS");
-//		} catch (StationException e) {
-//			response = new ResponseDTO(HttpStatus.BAD_REQUEST, null, "400", e.getMessage());
-//		} catch (Exception e) {
-//			response = new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, null, "500", e.getMessage());
-//		}
-//		return new ResponseEntity<>(response, response.getStatus());
-//
-//	}
+	}
+
+	@GetMapping("name/{name}")
+	public ResponseEntity<Object> findByName(@PathVariable String name) {
+		ResponseDTO response = null;
+		final Station station = stationService.findByName(name);
+		try {
+			if (null == station) {
+				String message = MessageFormat.format("Station for Name {0} does not exist", name);
+				throw new StationException(message);
+			}
+			response = new ResponseDTO(HttpStatus.OK, station, "200", "SUCCESS");
+		} catch (StationException e) {
+			response = new ResponseDTO(HttpStatus.BAD_REQUEST, null, "400", e.getMessage());
+		} catch (Exception e) {
+			response = new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, null, "500", e.getMessage());
+		}
+		return new ResponseEntity<>(response, response.getStatus());
+
+	}
 
 }
