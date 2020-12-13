@@ -27,4 +27,6 @@ public interface StationService {
 
 	List<Station> findHDEnabled();
 
+	List<Station> findByIdorName(String search);
+
 }

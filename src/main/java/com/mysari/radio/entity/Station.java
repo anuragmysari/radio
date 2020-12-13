@@ -14,7 +14,7 @@ public class Station {
 
 	public String stationId;
 	public String name;
-	public boolean hdEnabled;
+	public boolean hd_Enabled;
 	public String callSign;
 
 }

@@ -29,6 +29,9 @@ dependencies {
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	compile('org.springframework.boot:spring-boot-starter-web')
+	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.7.0'
+	
 }
 
 test {

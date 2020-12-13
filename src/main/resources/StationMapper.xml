@@ -5,7 +5,7 @@
 		type="com.mysari.radio.mapper.StationMapper">
 		<id column="stationId" property="stationId" jdbcType="VARCHAR" />
 		<result column="name" property="name" jdbcType="VARCHAR" />
-		<result column="hdEnabled" property="hdEnabled"
+		<result column="hd_Enabled" property="hd_Enabled"
 			jdbcType="TINYINT" />
 		<result column="callSign" property="callSign"
 			jdbcType="VARCHAR" />
@@ -21,6 +21,13 @@
 		SELECT * FROM STATION WHERE
 		STATIONID = #{stationId}
 	</select>
+	
+	<!--Find By ID or Name -->
+	<select id="findByIDorName" resultType="station">
+		SELECT * FROM STATION WHERE
+		STATIONID = #{search} or 
+		NAME = #{search}
+	</select>
 
 	<!--Find By NAME -->
 	<select id="findByName" resultType="station">
@@ -31,15 +38,15 @@
 	<!--Find HDEnabled -->
 	<select id="findHDEnabled" resultType="station">
 		SELECT * FROM STATION
-		WHERE HDENABLED = TRUE
+		WHERE HD_ENABLED = TRUE
 	</select>
 
 	<!--Add Station -->
 	<insert id="addStation" useGeneratedKeys="true" keyProperty="id"
 		parameterType="Station">
-		INSERT INTO STATION(stationId, name, hdEnabled,
+		INSERT INTO STATION(stationId, name, hd_Enabled,
 		callSign)
-		VALUES(#{stationId}, #{name}, #{hdEnabled}, #{callSign})
+		VALUES(#{stationId}, #{name}, #{hd_Enabled}, #{callSign})
 	</insert>
 
 	<!--Remove Station -->
@@ -50,7 +57,7 @@
 	<!--Update Station information -->
 	<update id="updateStation" parameterType="Station">
 		UPDATE STATION SET NAME
-		= #{name}, HDENABLED =#{hdEnabled}, CALLSIGN
+		= #{name}, HD_ENABLED =#{hd_Enabled}, CALLSIGN
 		=#{callSign}
 		WHERE
 		STATIONID = #{stationId}

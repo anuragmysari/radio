@@ -30,6 +30,8 @@ public interface StationMapper {
 
 	Station findByName(String name);
 
+	List<Station> findByIDorName(String search);
+
 	List<Station> findHDEnabled();
 
 }

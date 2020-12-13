@@ -38,7 +38,7 @@ public class StationServiceImpl implements StationService {
 
 	@Override
 	public void updateStation(Station station) {
-		stationMapper.updateStation(station.getStationId(), station.getName(), station.isHdEnabled(),
+		stationMapper.updateStation(station.getStationId(), station.getName(), station.isHd_Enabled(),
 				station.getCallSign());
 	}
 
@@ -50,6 +50,11 @@ public class StationServiceImpl implements StationService {
 	@Override
 	public Station findByName(String name) {
 		return stationMapper.findByName(name);
+	}
+
+	@Override
+	public List<Station> findByIdorName(String search) {
+		return stationMapper.findByIDorName(search);
 	}
 
 	@Override

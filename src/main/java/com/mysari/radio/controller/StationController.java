@@ -22,12 +22,15 @@ import com.mysari.radio.entity.Station;
 import com.mysari.radio.exception.StationException;
 import com.mysari.radio.service.StationService;
 
+import io.swagger.annotations.Api;
+
 /**
  * @author anuragmysari
  *
  */
 @org.springframework.web.bind.annotation.RestController
 @RequestMapping("/station/")
+@Api(tags = "Radio Station API")
 public class StationController {
 
 	@Autowired
@@ -45,18 +48,6 @@ public class StationController {
 		return new ResponseEntity<>(response, response.getStatus());
 	}
 
-	@GetMapping("hd")
-	public ResponseEntity<Object> findHDEnabled() {
-		ResponseDTO response = null;
-		try {
-			final List<Station> findAll = stationService.findHDEnabled();
-			response = new ResponseDTO(HttpStatus.OK, findAll, "200", "SUCCESS");
-		} catch (Exception e) {
-			response = new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, null, "500", e.getMessage());
-		}
-		return new ResponseEntity<>(response, response.getStatus());
-	}
-
 	@PostMapping("add")
 	public ResponseEntity<Object> addStation(@RequestBody Station station) {
 		ResponseDTO response = null;
@@ -67,68 +58,6 @@ public class StationController {
 			}
 			stationService.addStation(station);
 			response = new ResponseDTO(HttpStatus.CREATED, station, "201", "CREATED");
-		} catch (StationException e) {
-			response = new ResponseDTO(HttpStatus.BAD_REQUEST, null, "400", e.getMessage());
-		} catch (Exception e) {
-			response = new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, null, "500", e.getMessage());
-		}
-		return new ResponseEntity<>(response, response.getStatus());
-
-	}
-
-	@GetMapping(value = "{stationId}")
-	public ResponseEntity<Object> get(@PathVariable String stationId) {
-		ResponseDTO response = null;
-		final Station station = stationService.findByID(stationId);
-		try {
-			if (null == station) {
-				String message = MessageFormat.format("Station for Id {0} does not exist", stationId);
-				throw new StationException(message);
-			}
-			response = new ResponseDTO(HttpStatus.OK, station, "200", "SUCCESS");
-		} catch (StationException e) {
-			response = new ResponseDTO(HttpStatus.BAD_REQUEST, null, "400", e.getMessage());
-		} catch (Exception e) {
-			response = new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, null, "500", e.getMessage());
-		}
-		return new ResponseEntity<>(response, response.getStatus());
-
-	}
-
-	@GetMapping("name/{name}")
-	public ResponseEntity<Object> findByName(@PathVariable String name) {
-		ResponseDTO response = null;
-		final Station station = stationService.findByName(name);
-		try {
-			if (null == station) {
-				String message = MessageFormat.format("Station for Name {0} does not exist", name);
-				throw new StationException(message);
-			}
-			response = new ResponseDTO(HttpStatus.OK, station, "200", "SUCCESS");
-		} catch (StationException e) {
-			response = new ResponseDTO(HttpStatus.BAD_REQUEST, null, "400", e.getMessage());
-		} catch (Exception e) {
-			response = new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, null, "500", e.getMessage());
-		}
-		return new ResponseEntity<>(response, response.getStatus());
-
-	}
-
-	@PutMapping(value = "{stationId}")
-	public ResponseEntity<Object> update(@PathVariable String stationId, @RequestBody Station station) {
-		ResponseDTO response = null;
-		try {
-			if (null != station.getStationId() || stationId != station.getStationId()) {
-				throw new StationException("StationId Mismatch");
-			}
-			if (null == stationService.findByID(stationId)) {
-				String message = MessageFormat.format("Station for Id {0} does not exist", stationId);
-				throw new StationException(message);
-			}
-			station.setStationId(stationId);
-			stationService.updateStation(station);
-			// station = stationService.findByID(stationId);
-			response = new ResponseDTO(HttpStatus.OK, station, "200", "UPDATED");
 		} catch (StationException e) {
 			response = new ResponseDTO(HttpStatus.BAD_REQUEST, null, "400", e.getMessage());
 		} catch (Exception e) {
@@ -159,10 +88,96 @@ public class StationController {
 
 	}
 
-	@DeleteMapping()
-	public void deleteAll() {
-//		stationService.removeAll();
+	@PutMapping(value = "{stationId}")
+	public ResponseEntity<Object> update(@PathVariable String stationId, @RequestBody Station station) {
+		ResponseDTO response = null;
+		try {
+			if (null != station.getStationId() || stationId != station.getStationId()) {
+				throw new StationException("StationId Mismatch");
+			}
+			if (null == stationService.findByID(stationId)) {
+				String message = MessageFormat.format("Station for Id {0} does not exist", stationId);
+				throw new StationException(message);
+			}
+			station.setStationId(stationId);
+			stationService.updateStation(station);
+			response = new ResponseDTO(HttpStatus.OK, station, "200", "UPDATED");
+		} catch (StationException e) {
+			response = new ResponseDTO(HttpStatus.BAD_REQUEST, null, "400", e.getMessage());
+		} catch (Exception e) {
+			response = new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, null, "500", e.getMessage());
+		}
+		return new ResponseEntity<>(response, response.getStatus());
 
 	}
+
+	@GetMapping(value = "{search}")
+	public ResponseEntity<Object> get(@PathVariable String search) {
+		ResponseDTO response = null;
+		final List<Station> station = stationService.findByIdorName(search);
+		try {
+			if (null == station || station.isEmpty()) {
+				String message = MessageFormat.format("Station for search {0} does not exist", search);
+				throw new StationException(message);
+			}
+			response = new ResponseDTO(HttpStatus.OK, station, "200", "SUCCESS");
+		} catch (StationException e) {
+			response = new ResponseDTO(HttpStatus.BAD_REQUEST, null, "400", e.getMessage());
+		} catch (Exception e) {
+			response = new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, null, "500", e.getMessage());
+		}
+		return new ResponseEntity<>(response, response.getStatus());
+
+	}
+
+	@GetMapping("hd")
+	public ResponseEntity<Object> findHDEnabled() {
+		ResponseDTO response = null;
+		try {
+			final List<Station> findAll = stationService.findHDEnabled();
+			response = new ResponseDTO(HttpStatus.OK, findAll, "200", "SUCCESS");
+		} catch (Exception e) {
+			response = new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, null, "500", e.getMessage());
+		}
+		return new ResponseEntity<>(response, response.getStatus());
+	}
+
+//	@GetMapping(value = "{stationId}")
+//	public ResponseEntity<Object> get(@PathVariable String stationId) {
+//		ResponseDTO response = null;
+//		final Station station = stationService.findByID(stationId);
+//		try {
+//			if (null == station) {
+//				String message = MessageFormat.format("Station for Id {0} does not exist", stationId);
+//				throw new StationException(message);
+//			}
+//			response = new ResponseDTO(HttpStatus.OK, station, "200", "SUCCESS");
+//		} catch (StationException e) {
+//			response = new ResponseDTO(HttpStatus.BAD_REQUEST, null, "400", e.getMessage());
+//		} catch (Exception e) {
+//			response = new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, null, "500", e.getMessage());
+//		}
+//		return new ResponseEntity<>(response, response.getStatus());
+//
+//	}
+
+//	@GetMapping("name/{name}")
+//	public ResponseEntity<Object> findByName(@PathVariable String name) {
+//		ResponseDTO response = null;
+//		final Station station = stationService.findByName(name);
+//		try {
+//			if (null == station) {
+//				String message = MessageFormat.format("Station for Name {0} does not exist", name);
+//				throw new StationException(message);
+//			}
+//			response = new ResponseDTO(HttpStatus.OK, station, "200", "SUCCESS");
+//		} catch (StationException e) {
+//			response = new ResponseDTO(HttpStatus.BAD_REQUEST, null, "400", e.getMessage());
+//		} catch (Exception e) {
+//			response = new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, null, "500", e.getMessage());
+//		}
+//		return new ResponseEntity<>(response, response.getStatus());
+//
+//	}
 
 }
