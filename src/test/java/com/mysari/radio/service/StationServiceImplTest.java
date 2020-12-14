@@ -123,6 +123,13 @@ class StationServiceImplTest {
 		Assertions.assertThrows(StationException.class, () -> service.updateStation(station, "123Z"));
 	}
 
+	@Test
+	void testUpdateStationException2() throws StationException {
+		when(stationMapper.findByID("123Z")).thenReturn(null);
+		Assertions.assertThrows(StationException.class,
+				() -> service.updateStation(Station.builder().stationId(null).build(), "123Z"));
+	}
+
 	/**
 	 * Test method for
 	 * {@link com.mysari.radio.service.StationServiceImpl#findByID(java.lang.String)}.

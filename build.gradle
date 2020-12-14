@@ -54,7 +54,7 @@ jacocoTestReport {
     afterEvaluate {
         classDirectories.from = files(classDirectories.files.collect {
             fileTree(dir: it, 
-            exclude: ['com.mysari.radio.RadioApplication**',
+            exclude: ['com/mysari/radio/RadioApplication**',
             'com/mysari/radio/dto**', 
             'com/mysari/radio/entity**', 
             'com/mysari/radio/config**', 
@@ -72,11 +72,11 @@ jacocoTestCoverageVerification {
         minimum = 1
       }
       excludes = [
-        'com.mysari.radio.RadioApplication',
-        'com.mysari.radio.config.*',
-        'com.mysari.radio.dto.*',
-        'com.mysari.radio.entity.*',
-        'com.mysari.radio.mapper.*'
+        	'com/mysari/radio/RadioApplication**',
+            'com/mysari/radio/dto**', 
+            'com/mysari/radio/entity**', 
+            'com/mysari/radio/config**', 
+            'com/mysari/radio/mapper**'
       ]    
     }
     rule { 
