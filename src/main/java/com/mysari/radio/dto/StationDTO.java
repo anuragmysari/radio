@@ -3,7 +3,7 @@
  */
 package com.mysari.radio.dto;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -11,7 +11,7 @@ import lombok.Data;
  *
  */
 @Data
-@Builder
+@AllArgsConstructor
 public class StationDTO {
 
 	public String stationId;

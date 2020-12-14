@@ -38,7 +38,7 @@ public class StationController {
 	private StationService stationService;
 
 	@GetMapping("all")
-	public ResponseEntity<Object> findAll() {
+	public ResponseEntity<ResponseDTO> findAll() {
 		ResponseDTO response = null;
 		try {
 			final List<Station> findAll = stationService.findAll();
@@ -50,7 +50,7 @@ public class StationController {
 	}
 
 	@PostMapping("add")
-	public ResponseEntity<Object> addStation(@RequestBody StationDTO stationDTO) {
+	public ResponseEntity<ResponseDTO> addStation(@RequestBody StationDTO stationDTO) {
 		ResponseDTO response = null;
 		try {
 
@@ -68,13 +68,13 @@ public class StationController {
 	}
 
 	@DeleteMapping(value = "{stationId}")
-	public ResponseEntity<Object> delete(
+	public ResponseEntity<ResponseDTO> removeStation(
 			@ApiParam(name = "stationId", value = "Station ID (e.g: Z100)") @PathVariable String stationId) {
 
 		ResponseDTO response = null;
 		try {
-			Station station = stationService.findByID(stationId);
 			stationService.removeStation(stationId);
+			Station station = stationService.findByID(stationId);
 			response = new ResponseDTO(HttpStatus.OK, station, "200", "DELETED");
 		} catch (StationException e) {
 			response = new ResponseDTO(HttpStatus.BAD_REQUEST, null, "400", e.getMessage());
@@ -86,7 +86,7 @@ public class StationController {
 	}
 
 	@PutMapping(value = "{stationId}")
-	public ResponseEntity<Object> update(
+	public ResponseEntity<ResponseDTO> update(
 			@ApiParam(name = "stationId", value = "Station ID (e.g: Z100)") @PathVariable String stationId,
 			@RequestBody StationDTO stationDTO) {
 		ResponseDTO response = null;
@@ -106,7 +106,7 @@ public class StationController {
 	}
 
 	@GetMapping(value = "search/{search}")
-	public ResponseEntity<Object> searchByIdorName(
+	public ResponseEntity<ResponseDTO> searchByIdorName(
 			@ApiParam(name = "search", value = "Station ID or Full Station Name (e.g: Z100, Hit Music)") @PathVariable String search) {
 		ResponseDTO response = null;
 		try {
@@ -122,7 +122,7 @@ public class StationController {
 	}
 
 	@GetMapping("hd")
-	public ResponseEntity<Object> findHDEnabled() {
+	public ResponseEntity<ResponseDTO> findHDEnabled() {
 		ResponseDTO response = null;
 		try {
 			final List<Station> findAll = stationService.findHDEnabled();
@@ -134,7 +134,7 @@ public class StationController {
 	}
 
 	@GetMapping(value = "id/{stationId}")
-	public ResponseEntity<Object> getById(
+	public ResponseEntity<ResponseDTO> getById(
 			@ApiParam(name = "stationId", value = "Station ID (e.g: Z100)") @PathVariable String stationId) {
 		ResponseDTO response = null;
 		try {
@@ -150,7 +150,7 @@ public class StationController {
 	}
 
 	@GetMapping("name/{name}")
-	public ResponseEntity<Object> findByName(
+	public ResponseEntity<ResponseDTO> findByName(
 			@ApiParam(name = "name", value = "Full Station Name (e.g: Hit Music)") @PathVariable String name) {
 		ResponseDTO response = null;
 
