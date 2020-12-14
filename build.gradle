@@ -2,6 +2,8 @@ plugins {
 	id 'org.springframework.boot' version '2.4.0'
 	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
 	id 'java'
+	id 'eclipse'
+	id 'jacoco'
 }
 
 group = 'com.mysari'
@@ -33,6 +35,56 @@ dependencies {
     compile "io.springfox:springfox-swagger-ui:3.0.0"
 }
 
+jacoco {
+    toolVersion = "0.8.5"
+    reportsDir = file("$buildDir/jacoco")
+}
+
+test {
+    finalizedBy jacocoTestReport
+}
+
 test {
 	useJUnitPlatform()
+}
+
+jacocoTestReport {
+   
+    
+    afterEvaluate {
+        classDirectories.from = files(classDirectories.files.collect {
+            fileTree(dir: it, 
+            exclude: ['com.mysari.radio.RadioApplication**',
+            'com/mysari/radio/dto**', 
+            'com/mysari/radio/entity**', 
+            'com/mysari/radio/config**', 
+            'com/mysari/radio/mapper**'])
+        })
+    }
+     build.dependsOn test
+}
+
+jacocoTestCoverageVerification {
+  violationRules {
+    rule {
+      element = 'CLASS'      
+      limit {
+        minimum = 1
+      }
+      excludes = [
+        'com.mysari.radio.RadioApplication',
+        'com.mysari.radio.config.*',
+        'com.mysari.radio.dto.*',
+        'com.mysari.radio.entity.*',
+        'com.mysari.radio.mapper.*'
+      ]    
+    }
+    rule { 
+      limit {
+        counter = 'INSTRUCTIONS' 
+        value = 'MISSEDRATIO'
+        minimum = 0.3 
+      } 
+    }
+  }
 }

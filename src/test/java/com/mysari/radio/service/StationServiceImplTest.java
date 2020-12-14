@@ -179,6 +179,12 @@ class StationServiceImplTest {
 		Assertions.assertThrows(StationException.class, () -> service.findByIdorName("Hit Music"));
 	}
 
+	@Test
+	void testFindByIdorNameEmptyException() throws StationException {
+		when(stationMapper.findByIDorName("Hit Music")).thenReturn(new ArrayList<>());
+		Assertions.assertThrows(StationException.class, () -> service.findByIdorName("Hit Music"));
+	}
+
 	/**
 	 * Test method for
 	 * {@link com.mysari.radio.service.StationServiceImpl#findHDEnabled()}.
