@@ -17,11 +17,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.mysari.radio.dto.ResponseDTO;
+import com.mysari.radio.dto.StationDTO;
 import com.mysari.radio.entity.Station;
 import com.mysari.radio.exception.StationException;
 import com.mysari.radio.service.StationService;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiParam;
 
 /**
  * @author anuragmysari
@@ -48,9 +50,12 @@ public class StationController {
 	}
 
 	@PostMapping("add")
-	public ResponseEntity<Object> addStation(@RequestBody Station station) {
+	public ResponseEntity<Object> addStation(@RequestBody StationDTO stationDTO) {
 		ResponseDTO response = null;
 		try {
+
+			Station station = Station.builder().stationId(stationDTO.getStationId()).name(stationDTO.getName())
+					.hd_Enabled(stationDTO.isHd_Enabled()).callSign(stationDTO.getCallSign()).build();
 			stationService.addStation(station);
 			response = new ResponseDTO(HttpStatus.CREATED, station, "201", "CREATED");
 		} catch (StationException e) {
@@ -63,7 +68,8 @@ public class StationController {
 	}
 
 	@DeleteMapping(value = "{stationId}")
-	public ResponseEntity<Object> delete(@PathVariable String stationId) {
+	public ResponseEntity<Object> delete(
+			@ApiParam(name = "stationId", value = "Station ID (e.g: Z100)") @PathVariable String stationId) {
 
 		ResponseDTO response = null;
 		try {
@@ -80,9 +86,13 @@ public class StationController {
 	}
 
 	@PutMapping(value = "{stationId}")
-	public ResponseEntity<Object> update(@PathVariable String stationId, @RequestBody Station station) {
+	public ResponseEntity<Object> update(
+			@ApiParam(name = "stationId", value = "Station ID (e.g: Z100)") @PathVariable String stationId,
+			@RequestBody StationDTO stationDTO) {
 		ResponseDTO response = null;
 		try {
+			Station station = Station.builder().stationId(stationDTO.getStationId()).name(stationDTO.getName())
+					.hd_Enabled(stationDTO.isHd_Enabled()).callSign(stationDTO.getCallSign()).build();
 			stationService.updateStation(station, stationId);
 			station.setStationId(stationId);
 			response = new ResponseDTO(HttpStatus.OK, station, "200", "UPDATED");
@@ -96,7 +106,8 @@ public class StationController {
 	}
 
 	@GetMapping(value = "search/{search}")
-	public ResponseEntity<Object> searchByIdorName(@PathVariable String search) {
+	public ResponseEntity<Object> searchByIdorName(
+			@ApiParam(name = "search", value = "Station ID or Full Station Name (e.g: Z100, Hit Music)") @PathVariable String search) {
 		ResponseDTO response = null;
 		try {
 			final List<Station> station = stationService.findByIdorName(search);
@@ -123,7 +134,8 @@ public class StationController {
 	}
 
 	@GetMapping(value = "id/{stationId}")
-	public ResponseEntity<Object> getById(@PathVariable String stationId) {
+	public ResponseEntity<Object> getById(
+			@ApiParam(name = "stationId", value = "Station ID (e.g: Z100)") @PathVariable String stationId) {
 		ResponseDTO response = null;
 		try {
 			final Station station = stationService.findByID(stationId);
@@ -138,7 +150,8 @@ public class StationController {
 	}
 
 	@GetMapping("name/{name}")
-	public ResponseEntity<Object> findByName(@PathVariable String name) {
+	public ResponseEntity<Object> findByName(
+			@ApiParam(name = "name", value = "Full Station Name (e.g: Hit Music)") @PathVariable String name) {
 		ResponseDTO response = null;
 
 		try {

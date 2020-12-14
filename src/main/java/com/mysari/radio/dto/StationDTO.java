@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.mysari.radio.entity;
+package com.mysari.radio.dto;
 
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +12,7 @@ import lombok.Data;
  */
 @Data
 @Builder
-public class Station {
+public class StationDTO {
 
 	public String stationId;
 	public String name;
