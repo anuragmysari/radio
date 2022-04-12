@@ -73,8 +73,8 @@ public class StationController {
 
 		ResponseDTO response = null;
 		try {
-			stationService.removeStation(stationId);
 			Station station = stationService.findByID(stationId);
+			stationService.removeStation(stationId);
 			response = new ResponseDTO(HttpStatus.OK, station, "200", "DELETED");
 		} catch (StationException e) {
 			response = new ResponseDTO(HttpStatus.BAD_REQUEST, null, "400", e.getMessage());
